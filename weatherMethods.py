@@ -52,14 +52,19 @@ class GetWindSpeed:
         # Only Load files from nearest departure time forecast
         DepTimeTag = timeMethods.getTimeTag((self.departureTime - meteoTime).seconds, valid_timeTags_array)        
         Final_timeTags = valid_timeTags[DepTimeTag:]
-        winds = []
+        
         lvls = {}
-        for vfidx in range(DepTimeTag, len(valid_timeTags)):
-            grbs = pygrib.open(valid_fnames[vfidx])
-            uin = grbs.select(shortName='u', typeOfLevel='isobaricInhPa')
-            vin = grbs.select(shortName='v', typeOfLevel='isobaricInhPa')
-            grbs.close()
-            winds.append((uin, vin))
+        grbs = pygrib.open(valid_fnames[DepTimeTag])
+        uin = grbs.select(shortName='u', typeOfLevel='isobaricInhPa', level = lambda l: l > 150 and l <= 1000)
+        vin = grbs.select(shortName='v', typeOfLevel='isobaricInhPa', level = lambda l: l > 150 and l <= 1000)
+        grbs.close()
+        winds = [(uin, vin)]
+#        for vfidx in range(DepTimeTag, len(valid_timeTags)):
+#            grbs = pygrib.open(valid_fnames[vfidx])
+#            uin = grbs.select(shortName='u', typeOfLevel='isobaricInhPa')
+#            vin = grbs.select(shortName='v', typeOfLevel='isobaricInhPa')
+#            grbs.close()
+#            winds.append((uin, vin))
 
         try:
             for k in range(len(uin)):
@@ -73,13 +78,16 @@ class GetWindSpeed:
     def getWind(self, lon ,lat, alt, cur_time, lonl, latl):
         azimuth = tools.g.inv(lonl, latl, lon, lat)[0]
         # return the forward [0] and back [1] azimuths, and distance between [3] two points
-        diffTime = (cur_time - self.meteoTime).seconds
-        tag = timeMethods.getTimeTag(diffTime, self.final_timeTags_array)
+#        diffTime = (cur_time - self.meteoTime).seconds
+#        tag = timeMethods.getTimeTag(diffTime, self.final_timeTags_array)
         try:
             lvl= tools.proxilvl(alt, self.lvls)
             i_lvl = int(self.lvls[lvl])
-            u = get_data_at_lonlat(self.winds[tag][0][i_lvl], lon, lat)
-            v = get_data_at_lonlat(self.winds[tag][1][i_lvl], lon, lat)
+            u = get_data_at_lonlat(self.winds[0][0][i_lvl], lon, lat)
+            v = get_data_at_lonlat(self.winds[0][1][i_lvl], lon, lat)
+            
+#            u = get_data_at_lonlat(self.winds[tag][0][i_lvl], lon, lat)
+#            v = get_data_at_lonlat(self.winds[tag][1][i_lvl], lon, lat)
             u = np.mean(u)
             v = np.mean(v)
             windSpeed = u * math.sin(azimuth * math.pi / 180) * 3.6 + v * math.cos(azimuth * math.pi / 180) * 3.6
