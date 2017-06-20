@@ -16,8 +16,15 @@ from scipy.spatial import cKDTree
 import sys
 import math
 
-DEP = 'FLL'
-ARR = 'JFK'
+"""
+Required Files:
+Valid FLight Tracks
+Labeled Data
+MNL_DATA
+"""
+
+DEP = 'JFK'
+ARR = 'LAX'
 Year = 2013
 print(DEP,'-->',ARR)
 
@@ -105,6 +112,7 @@ for i in range(LabelData.shape[0]):
             except KeyError:
                 u_wind = np.nan
                 v_wind = np.nan
+                
             temp_wind.set_value(lvl, u_col_name, u_wind)
             temp_wind.set_value(lvl, v_col_name, v_wind)
     except KeyboardInterrupt:
