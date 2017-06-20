@@ -15,7 +15,9 @@ import tools
 import math
 import numpy as np
 
-path = '/media/liuyulin101/YulinLiu/WindData'
+path1 = '/media/liuyulin101/YulinLiu/WindData'
+path2 = '/home/liuyulin101/Desktop/Wind_Mining'
+
 
 class GetWindSpeed:
     def __init__(self, departureTime, arrivalTime):
@@ -29,7 +31,7 @@ class GetWindSpeed:
         Valid: ['000','001','006']
         Final: ['001','006']
         """
-        datasrc = path + '/DATA/filtered_weather_data/namanl'
+        datasrc = path1 + '/DATA/filtered_weather_data/namanl'
         AllFileName = os.listdir(datasrc)
         datatype = 'namanl'
         meteoTime = timeMethods.getLastWeatherDate(self.departureTime, 'namanl')
@@ -55,8 +57,8 @@ class GetWindSpeed:
         
         lvls = {}
         grbs = pygrib.open(valid_fnames[DepTimeTag])
-        uin = grbs.select(shortName='u', typeOfLevel='isobaricInhPa', level = lambda l: l > 150 and l <= 1000)
-        vin = grbs.select(shortName='v', typeOfLevel='isobaricInhPa', level = lambda l: l > 150 and l <= 1000)
+        uin = grbs.select(shortName='u', typeOfLevel='isobaricInhPa', level = lambda l: l >= 150 and l <= 1000)
+        vin = grbs.select(shortName='v', typeOfLevel='isobaricInhPa', level = lambda l: l >= 150 and l <= 1000)
         grbs.close()
         winds = [(uin, vin)]
 #        for vfidx in range(DepTimeTag, len(valid_timeTags)):
