@@ -38,7 +38,7 @@ print(DEP,'-->',ARR)
 departureTime = datetime.datetime(2013, 2, 1, 1, 30)
 arrivalTime = datetime.datetime(2013, 2, 1, 6, 30)
 WindClass = weatherMethods.GetWindSpeed(departureTime, arrivalTime)
-Winds = WindClass.winds
+Winds = WindClass.winds # m/s
 
 
 # In[4]:

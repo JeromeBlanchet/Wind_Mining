@@ -88,14 +88,12 @@ class GetWindSpeed:
             u = get_data_at_lonlat(self.winds[0][0][i_lvl], lon, lat)
             v = get_data_at_lonlat(self.winds[0][1][i_lvl], lon, lat)
             
-#            u = get_data_at_lonlat(self.winds[tag][0][i_lvl], lon, lat)
-#            v = get_data_at_lonlat(self.winds[tag][1][i_lvl], lon, lat)
             u = np.mean(u)
             v = np.mean(v)
-            windSpeed = u * math.sin(azimuth * math.pi / 180) * 3.6 + v * math.cos(azimuth * math.pi / 180) * 3.6
+            windSpeed = u * math.sin(azimuth * math.pi / 180) + v * math.cos(azimuth * math.pi / 180)
         except:
             windSpeed = 999999
-        # km/hr        
+        # m/s    
         return windSpeed
 
     
