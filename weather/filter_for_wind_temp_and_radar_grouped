@@ -1,3 +1,3 @@
 if ((paramId==131 || paramId==132 || paramId==130 ||paramId ==129212) && (typeOfLevel is "isobaricInhPa") && (level >= 150)){
-    write "../TrashHolder/test_filtered_file.grb";
+    write "/home/liuyulin101/Desktop/Wind_Mining/DATA/filtered_weather_data/temp.grb";
 }
