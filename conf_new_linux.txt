@@ -17,3 +17,11 @@ install pygrib (http://www.cloud-rocket.com/2016/01/installing-pygrib-on-ubuntu-
 	j. make install
 7. install pygrib: conda install -c conda-forge pygrib 
 
+install R
+install tensorflow 1.6
+install ffmepg
+install Rstudio
+install chromium
+install sublime3
+install vim
+
