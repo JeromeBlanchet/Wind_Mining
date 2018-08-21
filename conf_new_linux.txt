@@ -53,7 +53,9 @@ sudo apt-get install pgadmin3
 How to use postgis to process GRIB:
 http://www.cef-cfr.ca/uploads/Membres/PierreRacine_FOSS4G_2011.pdf
 how to insert grib to database
-raster2pgsql -s 9802 -I PATH/TO/GRIB/*.grb TABLE_NAME | psql DATABASE_NAME
+
+raster2pgsql -s 9802 -c -I -F -n fname ../DATA/filtered_weather_data/namanl/namanl_218_20130806_1800_006.grb grib_test |  psql template_postgis 
+raster2pgsql -s 9802 -a -I -F -n PATH/TO/GRIB/*.grb TABLE_NAME | psql DATABASE_NAME
 
 Doc for postgis raster processing
 https://postgis.net/docs/using_raster_dataman.html
@@ -85,6 +87,7 @@ PROJCS["unnamed",
     PARAMETER["false_easting",0],
     PARAMETER["false_northing",0]]
 
+SELECT pg_size_pretty(pg_database_size('template_postgis'));
 
 
 INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( 9802, 'sr-org', 9802, '+proj=lcc +lat_1=25 +lat_2=25 +lat_0=25 +lon_0=-95 +x_0=0 +y_0=0 +a=6371200 +b=6371200 +units=m +no_defs ', 'PROJCS["unnamed",
