@@ -25,3 +25,84 @@ install chromium
 install sublime3
 install vim
 
+conda lib:
+shapely; fiona ("conda install" include gdals, proj4, basemap); pyproj; conda install -c anaconda psycopg2 
+
+
+install postgres
+(https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-16-04)
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib
+
+how to start:
+sudo -u -i postgres
+psql postgres
+alter user postgres with password 'XXXXXXXXXX';
+
+
+install postgis
+(https://www.gis-blog.com/how-to-install-postgis-2-3-on-ubuntu-16-04-lts/)
+sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
+sudo apt update
+sudo apt install postgis postgresql-9.5-postgis-2.3
+
+install pgadmin3
+sudo apt-get install pgadmin3
+
+
+How to use postgis to process GRIB:
+http://www.cef-cfr.ca/uploads/Membres/PierreRacine_FOSS4G_2011.pdf
+how to insert grib to database
+raster2pgsql -s 9802 -I PATH/TO/GRIB/*.grb TABLE_NAME | psql DATABASE_NAME
+
+Doc for postgis raster processing
+https://postgis.net/docs/using_raster_dataman.html
+http://www.perry.cz/clanky/postgis.html
+
+
+SELECT 
+rid AS rid_val,
+ST_Value(rast, 2, (ST_Transform(st_GeomFromText('POINT(-93.3 25.3)', 4326), 9802))) AS value,
+ST_NearestValue(rast, 2, (ST_Transform(st_GeomFromText('POINT(-93.3 25.3)', 4326), 9802))) as nearest_val
+FROM grib_test
+WHERE
+rid = 2
+;
+
+gdalstsinfo GRIBFILE
+OGC WKT :
+PROJCS["unnamed",
+    GEOGCS["Coordinate System imported from GRIB file",
+        DATUM["unknown",
+            SPHEROID["Sphere",6371200,0]],
+        PRIMEM["Greenwich",0],
+        UNIT["degree",0.0174532925199433]],
+    PROJECTION["Lambert_Conformal_Conic_2SP"],
+    PARAMETER["standard_parallel_1",25],
+    PARAMETER["standard_parallel_2",25],
+    PARAMETER["latitude_of_origin",25],
+    PARAMETER["central_meridian",-95],
+    PARAMETER["false_easting",0],
+    PARAMETER["false_northing",0]]
+
+
+
+INSERT into spatial_ref_sys (srid, auth_name, auth_srid, proj4text, srtext) values ( 9802, 'sr-org', 9802, '+proj=lcc +lat_1=25 +lat_2=25 +lat_0=25 +lon_0=-95 +x_0=0 +y_0=0 +a=6371200 +b=6371200 +units=m +no_defs ', 'PROJCS["unnamed",
+    GEOGCS["Coordinate System imported from GRIB file",
+        DATUM["unknown",
+            SPHEROID["Sphere",6371200,0]],
+        PRIMEM["Greenwich",0],
+        UNIT["degree",0.0174532925199433]],
+    PROJECTION["Lambert_Conformal_Conic_2SP"],
+    PARAMETER["standard_parallel_1",25],
+    PARAMETER["standard_parallel_2",25],
+    PARAMETER["latitude_of_origin",25],
+    PARAMETER["central_meridian",-95],
+    PARAMETER["false_easting",0],
+    PARAMETER["false_northing",0]]');
+
+
+
+
+
+
